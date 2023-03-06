@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using HarmonyLib;
 using BepInEx;
@@ -45,6 +46,10 @@ namespace CWJesse.BetterFPS {
             ZSyncAnimation.GetHash("encumbered"),
             ZSyncAnimation.GetHash("flying")
         });
+
+        private static FieldInfo m_animator = AccessTools.Field(typeof(ZSyncAnimation), "m_animator");
+        private static FieldInfo m_nview = AccessTools.Field(typeof(ZSyncAnimation), "m_nview");
+        private static FieldInfo m_smoothCharacterSpeeds = AccessTools.Field(typeof(ZSyncAnimation), "m_smoothCharacterSpeeds");
         
         [HarmonyPatch(typeof(Character), "UpdateWalking")]
         [HarmonyPostfix]
@@ -53,11 +58,11 @@ namespace CWJesse.BetterFPS {
             if (!updateWalkingTasks.TryGetValue(__instance, out Task t) || t.IsCompleted) {
                 int zanimId = ___m_zanim.GetHashCode();
                 
-                Animator animator = (Animator)AccessTools.Field(typeof(ZSyncAnimation), "m_animator").GetValue(___m_zanim);
-                ZNetView znv = (ZNetView)AccessTools.Field(typeof(ZSyncAnimation), "m_nview").GetValue(___m_zanim);
+                Animator animator = (Animator)m_animator.GetValue(___m_zanim);
+                ZNetView znv = (ZNetView)m_nview.GetValue(___m_zanim);
                 ZDO zdo = znv.GetZDO();
                 bool isOwner = znv.IsOwner();
-                bool smoothSpeeds = (bool)AccessTools.Field(typeof(ZSyncAnimation), "m_smoothCharacterSpeeds").GetValue(___m_zanim);
+                bool smoothSpeeds = (bool)m_smoothCharacterSpeeds.GetValue(___m_zanim);
                 
                 updateWalkingTasks[__instance] = Task.Run(() => {
                     foreach (int i in walkAnimationFloatHashes) {
@@ -91,9 +96,12 @@ namespace CWJesse.BetterFPS {
             if (zdo == null || !isOwner) return;
             zdo.Set(438569 + hash, value);
         }
+
+        private static FieldInfo m_forwardSpeedID = AccessTools.Field(typeof(ZSyncAnimation), "m_forwardSpeedID");
+        private static FieldInfo m_sidewaySpeedID = AccessTools.Field(typeof(ZSyncAnimation), "m_sidewaySpeedID");
         private static void SetFloatOriginal(int hash, float value, Animator m_animator, ZDO zdo, bool isOwner, bool m_smoothCharacterSpeeds){
             if ((double) Mathf.Abs(m_animator.GetFloat(hash) - value) < 0.0099999997764825821) return;
-            if (m_smoothCharacterSpeeds && (hash == (int)AccessTools.Field(typeof(ZSyncAnimation), "m_forwardSpeedID").GetValue(null) || hash == (int)AccessTools.Field(typeof(ZSyncAnimation), "m_sidewaySpeedID").GetValue(null)))
+            if (m_smoothCharacterSpeeds && (hash == (int)m_forwardSpeedID.GetValue(null) || hash == (int)m_sidewaySpeedID.GetValue(null)))
                 m_animator.SetFloat(hash, value, 0.2f, Time.fixedDeltaTime);
             else m_animator.SetFloat(hash, value);
             if (zdo == null || !isOwner) return;
