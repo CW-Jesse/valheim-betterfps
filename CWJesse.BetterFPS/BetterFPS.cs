@@ -34,13 +34,17 @@ namespace CWJesse.BetterFPS {
         private static Dictionary<(int, int), float> setFloatCache =
             new Dictionary<(int, int), float>();
 
-        private static int forward_speed = ZSyncAnimation.GetHash("forward_speed");
-        private static int sideway_speed = ZSyncAnimation.GetHash("sideway_speed");
-        private static int turn_speed = ZSyncAnimation.GetHash("turn_speed");
-        private static int inWater = ZSyncAnimation.GetHash("inWater");
-        private static int onGround = ZSyncAnimation.GetHash("onGround");
-        private static int encumbered = ZSyncAnimation.GetHash("encumbered");
-        private static int flying = ZSyncAnimation.GetHash("flying");
+        private static HashSet<int> walkAnimationFloatHashes = new HashSet<int>(new [] {
+            ZSyncAnimation.GetHash("forward_speed"),
+            ZSyncAnimation.GetHash("sideway_speed"),
+            ZSyncAnimation.GetHash("turn_speed")
+        });
+        private static HashSet<int> walkAnimationBoolHashes = new HashSet<int>(new [] {
+            ZSyncAnimation.GetHash("inWater"),
+            ZSyncAnimation.GetHash("onGround"),
+            ZSyncAnimation.GetHash("encumbered"),
+            ZSyncAnimation.GetHash("flying")
+        });
         
         [HarmonyPatch(typeof(Character), "UpdateWalking")]
         [HarmonyPostfix]
@@ -56,13 +60,12 @@ namespace CWJesse.BetterFPS {
                 bool smoothSpeeds = (bool)AccessTools.Field(typeof(ZSyncAnimation), "m_smoothCharacterSpeeds").GetValue(___m_zanim);
                 
                 updateWalkingTasks[__instance] = Task.Run(() => {
-                    SetFloatOriginal(forward_speed, setFloatCache[(zanimId, forward_speed)], animator, zdo, isOwner, smoothSpeeds);
-                    SetFloatOriginal(sideway_speed, setFloatCache[(zanimId, sideway_speed)], animator, zdo, isOwner, smoothSpeeds);
-                    SetFloatOriginal(turn_speed, setFloatCache[(zanimId, turn_speed)], animator, zdo, isOwner, smoothSpeeds);
-                    SetBoolOriginal(inWater, setBoolCache[(zanimId, inWater)], animator, zdo, isOwner);
-                    SetBoolOriginal(onGround, setBoolCache[(zanimId, onGround)], animator, zdo, isOwner);
-                    SetBoolOriginal(encumbered, setBoolCache[(zanimId, encumbered)], animator, zdo, isOwner);
-                    SetBoolOriginal(flying, setBoolCache[(zanimId, flying)], animator, zdo, isOwner);
+                    foreach (int i in walkAnimationFloatHashes) {
+                        SetFloatOriginal(i, setFloatCache[(zanimId, i)], animator, zdo, isOwner, smoothSpeeds);
+                    }
+                    foreach (int i in walkAnimationBoolHashes) {
+                        SetBoolOriginal(i, setBoolCache[(zanimId, i)], animator, zdo, isOwner);
+                    }
                 });
             }
         }
@@ -70,6 +73,7 @@ namespace CWJesse.BetterFPS {
         [HarmonyPatch(typeof(ZSyncAnimation), nameof(ZSyncAnimation.SetBool), typeof(int), typeof(bool))]
         [HarmonyPrefix]
         public static bool SetBoolCache(ref ZSyncAnimation __instance, int hash, bool value) {
+            if (!walkAnimationFloatHashes.Contains(hash)) return true;
             setBoolCache[(__instance.GetHashCode(), hash)] = value;
             return false;
         }
@@ -77,6 +81,7 @@ namespace CWJesse.BetterFPS {
         [HarmonyPatch(typeof(ZSyncAnimation), nameof(ZSyncAnimation.SetFloat), typeof(int), typeof(float))]
         [HarmonyPrefix]
         public static bool SetFloatCache(ref ZSyncAnimation __instance, int hash, float value) {
+            if (!walkAnimationBoolHashes.Contains(hash)) return true;
             setFloatCache[(__instance.GetHashCode(), hash)] = value;
             return false;
         }
