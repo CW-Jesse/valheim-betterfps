@@ -17,27 +17,14 @@ namespace CW_Jesse.BetterFPS {
         public ZNetView m_nview;
         private ZSyncAnimation m_zanim;
         public bool m_smoothCharacterSpeeds;
-        public static int m_forwardSpeedID = ZSyncAnimation.GetHash("forward_speed");
-        public static int m_sidewaySpeedID = ZSyncAnimation.GetHash("sideway_speed");
         
         
         private static FieldInfo m_animatorFieldInfo = AccessTools.Field(typeof(Character), "m_animator");
         private static FieldInfo m_nviewFieldInfo = AccessTools.Field(typeof(Character), "m_nview");
         private static FieldInfo m_zanimFieldInfo = AccessTools.Field(typeof(Character), "m_zanim");
-        private static FieldInfo m_forwardSpeedIDFieldInfo = AccessTools.Field(typeof(ZSyncAnimation), "m_forwardSpeedID");
-        private static FieldInfo m_sidewaySpeedIDFieldInfo = AccessTools.Field(typeof(ZSyncAnimation), "m_sidewaySpeedID");
-        
-        public static HashSet<int> walkAnimationFloatHashes = new HashSet<int>(new [] {
-            ZSyncAnimation.GetHash("forward_speed"),
-            ZSyncAnimation.GetHash("sideway_speed"),
-            ZSyncAnimation.GetHash("turn_speed")
-        });
-        public static HashSet<int> walkAnimationBoolHashes = new HashSet<int>(new [] {
-            ZSyncAnimation.GetHash("inWater"),
-            ZSyncAnimation.GetHash("onGround"),
-            ZSyncAnimation.GetHash("encumbered"),
-            ZSyncAnimation.GetHash("flying")
-        });
+        public static int m_forwardSpeedID = (int)AccessTools.Field(typeof(ZSyncAnimation), "m_forwardSpeedID").GetValue(null);
+        public static int m_sidewaySpeedID = (int)AccessTools.Field(typeof(ZSyncAnimation), "m_sidewaySpeedID").GetValue(null);
+
         public AnimationsInfo(Character character) {
             m_animator = (Animator)m_animatorFieldInfo.GetValue(character);
             m_nview = (ZNetView)m_nviewFieldInfo.GetValue(character);
@@ -58,17 +45,17 @@ namespace CW_Jesse.BetterFPS {
 
         private static void ZanimSets() {
             foreach (AnimationsInfo aniInfo in aniInfos) {
-                foreach (int i in walkAnimationFloatHashes) {
+                foreach (int i in aniInfo.setFloatCache.Keys) {
                     aniInfo.SetFloatOriginal(i);
                 }
-                foreach (int i in walkAnimationBoolHashes) {
+                foreach (int i in aniInfo.setBoolCache.Keys) {
                     aniInfo.SetBoolOriginal(i);
                 }
             }
         }
         
         private void SetBoolOriginal(int hash) {
-            if (!setBoolCache.TryGetValue(hash, out bool value)) return;
+            bool value = setBoolCache[hash];
             
             if (m_animator.GetBool(hash) == value) return;
             m_animator.SetBool(hash, value);
@@ -77,10 +64,10 @@ namespace CW_Jesse.BetterFPS {
         }
 
         private void SetFloatOriginal(int hash) {
-            if (!setFloatCache.TryGetValue(hash, out float value)) return;
+            float value = setFloatCache[hash];
             
             if ((double) Mathf.Abs(m_animator.GetFloat(hash) - value) < 0.0099999997764825821) return;
-            if (m_smoothCharacterSpeeds && (hash == AnimationsInfo.m_forwardSpeedID || hash == AnimationsInfo.m_sidewaySpeedID))
+            if (m_smoothCharacterSpeeds && (hash == m_forwardSpeedID || hash == m_sidewaySpeedID))
                 m_animator.SetFloat(hash, value, 0.2f, Time.fixedDeltaTime);
             else m_animator.SetFloat(hash, value);
             if (m_nview.GetZDO() == null || !m_nview.IsOwner()) return;
@@ -115,7 +102,6 @@ namespace CW_Jesse.BetterFPS {
         [HarmonyPatch(typeof(Character), "Awake")]
         [HarmonyPostfix]
         public static void OnAwake(ref Character __instance) {
-            
             aniInfos[__instance.GetHashCode()] = new AnimationsInfo(__instance);
         }
         [HarmonyPatch(typeof(Character), nameof(Character.OnDestroy))]
@@ -126,28 +112,25 @@ namespace CW_Jesse.BetterFPS {
             }
         }
         
-        [HarmonyPatch(typeof(Character), "UpdateWalking")]
+        [HarmonyPatch(typeof(ZNetScene), "Update")]
         [HarmonyPostfix]
-        public static void UpdateWalkingThreaded(ref Character __instance, ref ZSyncAnimation ___m_zanim) {
+        public static void UpdateWalkingThreaded(ref Character __instance) {
             AnimationsInfo.Start();
-            // if (aniInfos.TryGetValue(__instance.GetHashCode(), out AnimationsInfo animationsInfo) && animationsInfo.aniInfosTask.IsCompleted) {
-            //     animationsInfo.aniInfosTask = Task.Run(() => ZanimSets(animationsInfo));
-            // }
         }
 
         [HarmonyPatch(typeof(ZSyncAnimation), nameof(ZSyncAnimation.SetBool), typeof(int), typeof(bool))]
         [HarmonyPrefix]
         public static bool SetBoolCache(ref ZSyncAnimation __instance, int hash, bool value) {
-            if (!AnimationsInfo.walkAnimationFloatHashes.Contains(hash)) return true;
-            aniInfos[__instance.GetHashCode()].setBoolCache[hash] = value;
+            if (!aniInfos.TryGetValue(__instance.GetHashCode(), out AnimationsInfo aniInfo)) return true;
+            aniInfo.setBoolCache[hash] = value;
             return false;
         }
 
         [HarmonyPatch(typeof(ZSyncAnimation), nameof(ZSyncAnimation.SetFloat), typeof(int), typeof(float))]
         [HarmonyPrefix]
         public static bool SetFloatCache(ref ZSyncAnimation __instance, int hash, float value) {
-            if (!AnimationsInfo.walkAnimationBoolHashes.Contains(hash)) return true;
-            aniInfos[__instance.GetHashCode()].setFloatCache[hash] = value;
+            if (!aniInfos.TryGetValue(__instance.GetHashCode(), out AnimationsInfo aniInfo)) return true;
+            aniInfo.setFloatCache[hash] = value;
             return false;
         }
     }
