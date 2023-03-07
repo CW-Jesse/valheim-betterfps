@@ -18,6 +18,7 @@ namespace CWJesse.BetterFPS {
 
             private Character character;
             private ZNetView m_nview;
+            public bool isAlive = true;
 
             public CharacterThread(Character character) {
                 this.character = character;
@@ -40,13 +41,6 @@ namespace CWJesse.BetterFPS {
                 CheckDeath = (Action)Delegate.CreateDelegate(typeof(Action), character, AccessTools.Method(typeof(Character), "CheckDeath"));
             }
 
-            public void Start() {
-                if (task.IsCompleted) {
-                    FixedUpdateOriginal();
-                    // task = Task.Run(() => FixedUpdateOriginal());
-                }
-            }
-
             private Action UpdateLayer;
             private Action UpdateContinousEffects;
             private Action<float> UpdateWater;
@@ -62,26 +56,29 @@ namespace CWJesse.BetterFPS {
             private Action<float> UnderWorldCheck;
             private Action SyncVelocity;
             private Action CheckDeath;
-            private void FixedUpdateOriginal() {
-                if (!m_nview.IsValid())
-                    return;
+            public void FixedUpdate() {
+                if (!m_nview.IsValid()) return;
                 float fixedDeltaTime = Time.fixedDeltaTime;
                 UpdateLayer();
-                UpdateContinousEffects();
                 UpdateWater(fixedDeltaTime);
-                UpdateGroundTilt(fixedDeltaTime);
                 SetVisible(m_nview.HasOwner());
                 UpdateLookTransition(fixedDeltaTime);
-                if (!m_nview.IsOwner())
-                    return;
+                if (task.IsCompleted) {
+                    task = Task.Run(() => {
+                        if (!isAlive) return;
+                        UpdateContinousEffects();
+                        if (!isAlive) return;
+                        UpdateGroundTilt(fixedDeltaTime);
+                        if (!m_nview.IsOwner() || !isAlive) return;
+                        UpdateMotion(fixedDeltaTime);
+                    });
+                }
+                if (!m_nview.IsOwner()) return;
                 UpdateGroundContact(fixedDeltaTime);
                 UpdateNoise(fixedDeltaTime);
                 character.GetSEMan().Update(fixedDeltaTime);
                 UpdateStagger(fixedDeltaTime);
                 UpdatePushback(fixedDeltaTime);
-                task = Task.Run(() => {
-                    UpdateMotion(fixedDeltaTime);
-                });
                 UpdateSmoke(fixedDeltaTime);
                 UnderWorldCheck(fixedDeltaTime);
                 SyncVelocity();
@@ -94,20 +91,21 @@ namespace CWJesse.BetterFPS {
         public static void OnAwake(ref Character __instance) {
             characterThreads.Add(__instance.GetHashCode(), new CharacterThread(__instance));
         }
-        [HarmonyPatch(typeof(Character), nameof(Character.OnDestroy))]
+        [HarmonyPatch(typeof(Character), "OnDeath")]
         [HarmonyPrefix]
-        public static bool OnDestroy(ref Character __instance) {
+        public static void OnDestroy(ref Character __instance) {
+            characterThreads[__instance.GetHashCode()].isAlive = false;
             characterThreads.Remove(__instance.GetHashCode());
-            return true;
         }
 
         [HarmonyPatch(typeof(Character), "FixedUpdate")]
         [HarmonyPrefix]
         public static bool FixedUpdate(ref Character __instance) {
-            if (characterThreads.TryGetValue(__instance.GetHashCode(), out CharacterThread characterThread)) {
-                characterThread.Start();
+            if (characterThreads.TryGetValue(__instance.GetHashCode(), out CharacterThread characterThread) && characterThread.isAlive) {
+                characterThread.FixedUpdate();
+                return false;
             }
-            return false;
+            return true;
         }
         
     }
