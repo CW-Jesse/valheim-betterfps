@@ -76,7 +76,7 @@ namespace CW_Jesse.BetterFPS {
     }
     
     [HarmonyPatch]
-    public class VUPB_Patch_ThreadedAnimations {
+    public class BetterFps_Patch_ThreadedAnimations {
 
         // private static MethodInfo zanimSetBool = AccessTools.Method(
         //     typeof(ZSyncAnimation),
