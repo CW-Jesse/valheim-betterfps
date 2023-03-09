@@ -9,6 +9,8 @@ namespace CWJesse.BetterFPS {
     
         void Awake() {
             harmony.PatchAll();
+
+            Game.isModded = true;
         }
         
         void OnDestroy() {
