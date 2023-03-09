@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CWJesse.BetterFPS {
     [HarmonyPatch]
-    public class BetterFps_Patch_GamePerformance {
+    public class BetterFps_Patch_MinFPS {
 
         [HarmonyPatch(typeof(Game), "Awake")]
         [HarmonyPostfix]
