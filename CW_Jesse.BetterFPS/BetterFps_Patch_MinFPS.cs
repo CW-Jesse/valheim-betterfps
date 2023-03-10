@@ -18,7 +18,7 @@ namespace CWJesse.BetterFPS {
         public static void InitConfig(ConfigFile config) {
             ConfigMinFps = config.Bind(
                 "BetterFPS",
-                "Mininum Target FPS",
+                "Minimum Target FPS",
                 30,
                 new ConfigDescription("Automatically reduces frequency of physics & animation calculations to meet this target FPS.", new AcceptableValueRange<int>(1, 120)));
         }

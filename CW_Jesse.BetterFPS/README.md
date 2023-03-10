@@ -13,7 +13,7 @@ For multiplayer improvements, you may also enjoy [Better Networking](https://val
 ### Configuration
 
 - **Enable**: It... enables the mod. Some reductions in CPU usage can only be turned off using this button.
-- **Mininum Target FPS**: If your FPS is below this number, this mod will reduce physics & animation calculations in an attempt to meet it, and will automatically improve the physics and animations as resources become available. Setting this too high can permanently make physics and animations choppy but all those Valheim VR users are probably looking for every frame they can get.  
+- **Minimum Target FPS**: If your FPS is below this number, this mod will reduce physics & animation calculations in an attempt to meet it, and will automatically improve the physics and animations as resources become available. Setting this too high can permanently make physics and animations choppy but all those Valheim VR users are probably looking for every frame they can get.  
 
 
 ### Thank You
