@@ -32,7 +32,9 @@ namespace CWJesse.BetterFPS {
         
         [HarmonyPatch(typeof(Character), "FixedUpdate")]
         [HarmonyPrefix]
-        public static bool CharacterUpdates(ref Character __instance, ref ZNetView ___m_nview, ref float ___m_lastGroundTouch, ref float ___m_jumpTimer) {
+        public static bool CharacterUpdates(ref Character __instance, ref ZNetView ___m_nview, ref float ___m_lastGroundTouch, ref float ___m_jumpTimer, ref float ___m_acceleration) {
+            ___m_acceleration = 50.0f / Time.fixedDeltaTime; // fix acceleration not being tied to fixedDeltaTime
+            
             if (!___m_nview.IsValid()) return false;
             if (__instance is Player) return true;
             
@@ -59,9 +61,13 @@ namespace CWJesse.BetterFPS {
             if (Time.fixedTime - lastUpdate > MIN_UPDATE_DELTA_TIME) {
                 float longFixedDeltaTime = Time.fixedTime - lastUpdate;
                 CharacterLastUpdateTime[instanceId] = Time.fixedTime;
+                
+                // fix acceleration not being tied to fixedDeltaTime
+                ___m_acceleration = 50.0f / longFixedDeltaTime;
+                
                 UpdateMotion(__instance, longFixedDeltaTime); // HEAVY
                 
-                // fix for inconsistent Valheim code:
+                // fix these values being set to Time.fixedDeltaTime instead of the local dt
                 if (!__instance.IsDead() && !__instance.IsDebugFlying()) {
                     ___m_lastGroundTouch += -fixedDeltaTime + longFixedDeltaTime;
                     ___m_jumpTimer += -fixedDeltaTime + longFixedDeltaTime;
