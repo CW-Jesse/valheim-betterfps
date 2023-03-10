@@ -38,8 +38,8 @@ namespace CWJesse.BetterFPS {
                 if (ConfigEnabled.Value) {
                     BetterFps_Patch_MinFPS.Start();
                 } else {
-                    Time.fixedDeltaTime = OriginalFixedDeltaTime;
-                    Time.maximumDeltaTime = OriginalMaximumDeltaTime;
+                    Time.fixedDeltaTime = OriginalFixedDeltaTime; // re-enabled by BetterFps_Patch_MinFPS.MeetMinFps()
+                    Time.maximumDeltaTime = OriginalMaximumDeltaTime; // re-enabled by BetterFps_Patch_MinFPS.Start()
                 }
             };
         }
