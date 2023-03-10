@@ -20,12 +20,12 @@ namespace CWJesse.BetterFPS {
                 "BetterFPS",
                 "Mininum Target FPS",
                 30,
-                new ConfigDescription("Attempt to meet this FPS by reducing frequency of physics & animation calculations.", new AcceptableValueRange<int>(1, 120)));
+                new ConfigDescription("Automatically reduces frequency of physics & animation calculations to meet this target FPS.", new AcceptableValueRange<int>(1, 120)));
         }
         
         [HarmonyPatch(typeof(Game), "Awake")]
         [HarmonyPostfix]
-        public static void ContinuePhysicsNextFrameIfNeeded() {
+        public static void Start() {
             Time.maximumDeltaTime = 1.0f; // this slows the game down, which feels worse than a low frame rate
         }
         
@@ -35,6 +35,8 @@ namespace CWJesse.BetterFPS {
         [HarmonyPatch(typeof(Game), "Update")]
         [HarmonyPostfix]
         public static void MeetMinFps() {
+            if (!BetterFps.ConfigEnabled.Value) return;
+            
             maxFrameTime = Mathf.Clamp(maxFrameTime * frameTimeAverage / (1.0f / ConfigMinFps.Value), 1.0f / 50.0f, 1.0f / 20.0f);
             Time.fixedDeltaTime = maxFrameTime;
         }
@@ -43,6 +45,8 @@ namespace CWJesse.BetterFPS {
         [HarmonyPatch(typeof(ConnectPanel), "UpdateFps")]
         [HarmonyPrefix]
         public static bool FpsCounterImprovements(ref Text ___m_fps, ref Text ___m_frameTime) {
+            if (!BetterFps.ConfigEnabled.Value) return true;
+            
             frameTimeAverage = Mathf.Lerp(frameTimeAverage, Time.unscaledDeltaTime, TIME_MEASUREMENT_VELOCITY);
             ___m_fps.text = (1.0f/frameTimeAverage).ToString("0");
             ___m_frameTime.text = $"({(frameTimeAverage * 1000f).ToString("00")}ms)";

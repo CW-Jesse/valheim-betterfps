@@ -13,6 +13,7 @@ namespace CWJesse.BetterFPS {
         [HarmonyPatch(typeof(ZNetScene), "Update")]
         [HarmonyPrefix]
         public static bool ZNetSceneUpdates(ref ZNetScene __instance) {
+            if (!BetterFps.ConfigEnabled.Value) return true;
 
             int instanceId = __instance.GetHashCode();
             if (!ZNetSceneLastUpdateTime.TryGetValue(instanceId, out float lastUpdate)) { ZNetSceneLastUpdateTime[instanceId] = Time.time; }

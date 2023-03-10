@@ -18,6 +18,7 @@ namespace CWJesse.BetterFPS {
         [HarmonyPatch(typeof(WaterVolume), "Update")]
         [HarmonyPrefix]
         public static bool WaterVolumeUpdates(ref WaterVolume __instance) {
+            if (!BetterFps.ConfigEnabled.Value) return true;
 
             int instanceId = __instance.GetHashCode();
             if (!WaterVolumeLastUpdateTime.TryGetValue(instanceId, out float lastUpdate)) { WaterVolumeLastUpdateTime[instanceId] = Time.time; }
@@ -32,6 +33,7 @@ namespace CWJesse.BetterFPS {
         [HarmonyPatch(typeof(Fish), "FixedUpdate")]
         [HarmonyPrefix]
         public static bool FishUpdates(ref Fish __instance) {
+            if (!BetterFps.ConfigEnabled.Value) return true;
 
             int instanceId = __instance.GetHashCode();
             if (!FishLastUpdateTime.TryGetValue(instanceId, out float lastUpdate)) { FishLastUpdateTime[instanceId] = Time.time; }
