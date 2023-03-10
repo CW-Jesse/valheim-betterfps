@@ -32,6 +32,18 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="CHANGELOG.md">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="manifest.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="README.md">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="copy /Y /V &quot;bin\Debug\net472\CW_Jesse.BetterFPS.dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\CW_Jesse.BetterFPS.dll&quot; &amp;&amp; copy /Y /V &quot;bin\Debug\net472\CW_Jesse.BetterFPS.pdb&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\CW_Jesse.BetterFPS.pdb&quot;" />
     </Target>

@@ -1,0 +1,9 @@
+{
+  "name": "CW_Jesses_Valheim_Framerate_Booster",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/CW-Jesse/valheim-betterfps",
+  "description": "Improve performance without reducing graphics by intelligently reducing CPU usage to meet your target FPS!",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.1901"
+  ]
+}
