@@ -36,7 +36,7 @@ namespace CWJesse.BetterFPS {
 
             ConfigEnabled.SettingChanged += (sender, args) => {
                 if (ConfigEnabled.Value) {
-                    BetterFps_Patch_MinFPS.Start();
+                    // BetterFps_Patch_MinFPS.Start();
                 } else {
                     Time.fixedDeltaTime = OriginalFixedDeltaTime; // re-enabled by BetterFps_Patch_MinFPS.MeetMinFps()
                     Time.maximumDeltaTime = OriginalMaximumDeltaTime; // re-enabled by BetterFps_Patch_MinFPS.Start()
