@@ -15,7 +15,7 @@ namespace CWJesse.BetterFPS {
         
         private static Dictionary<int, float> WaterVolumeLastUpdateTime = new Dictionary<int, float>();
         
-        [HarmonyPatch(typeof(WaterVolume), "UpdateFloaters")]
+        [HarmonyPatch(typeof(WaterVolume), "Update")]
         [HarmonyPrefix]
         public static bool WaterVolumeUpdates(ref WaterVolume __instance) {
 
