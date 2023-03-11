@@ -18,7 +18,7 @@ namespace CWJesse.BetterFPS {
             harmony.PatchAll();
             
             BetterFps.InitConfig(Config);
-            // BetterFps_Patch_MinFPS.InitConfig(Config);
+            BetterFps_Patch_MinFPS.InitConfig(Config);
 
             Game.isModded = true;
         }

@@ -13,7 +13,7 @@ namespace CWJesse.BetterFPS {
 
         private const int DEFAULT_MINFPS = 20;
         private const int MIN_MINFPS = 5;
-        private const int MAX_MINFPS = 120;
+        private const int MAX_MINFPS = 20;
         
         private const float MIN_FRAME_TIME = 0.05f;
         private const float MAX_FRAME_TIME = 0.2f;
@@ -42,7 +42,7 @@ namespace CWJesse.BetterFPS {
             // FrameTimeAverageAverage = Mathf.Lerp(FrameTimeAverage, FrameTimeAverage, Time.unscaledDeltaTime);
             // FrameTimeAverageAcceleration = FrameTimeAverage - FrameTimeAverageAverage;
             
-            MaxFrameTime = Mathf.Clamp(MaxFrameTime * FrameTimeAverage * FrameTimeAverage + 3, MIN_FIXED_DELTA_TIME, MAX_FIXED_DELTA_TIME);
+            MaxFrameTime = Mathf.Clamp(MaxFrameTime * FrameTimeAverage * ConfigMinFps.Value, MIN_FIXED_DELTA_TIME, MAX_FIXED_DELTA_TIME);
             Time.fixedDeltaTime = MaxFrameTime;
             
             // prevent hiccups greater than 25% at low frame rates, but also try for a minimum FPS of MIN_FRAME_TIME
