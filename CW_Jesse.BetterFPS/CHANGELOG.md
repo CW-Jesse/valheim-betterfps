@@ -1,3 +1,5 @@
+### 1.1.2
+- increased water calc rate a bit to reduce choppiness
 ### 1.1.1
 - fixed bug where mod was trying to set FPS too high regardless of config
 ### 1.1.0

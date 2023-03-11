@@ -11,7 +11,7 @@ namespace CWJesse.BetterFPS {
     
     [HarmonyPatch]
     public class BetterFps_Patch_Water {
-        private const float MIN_UPDATE_DELTA_TIME = 0.1f;
+        private const float MIN_UPDATE_DELTA_TIME = 0.05f;
         
         private static Dictionary<int, float> WaterVolumeLastUpdateTime = new Dictionary<int, float>();
         

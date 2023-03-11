@@ -4,7 +4,7 @@
         <TargetFramework>net472</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <Version>1.1.1</Version>
+        <Version>1.1.2</Version>
         <RootNamespace>CWJesse.BetterFPS</RootNamespace>
         <Title>CW_Jesse's Valheim Framerate Booster</Title>
         <Description>Improve performance without reducing graphics by intelligently reducing CPU usage to meet your target FPS!</Description>

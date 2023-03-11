@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CWJesse.BetterFPS {
     
-    [BepInPlugin("CW_Jesse.BetterFPS", "CW_Jesse's Valheim Framerate Booster", "1.0.0")]
+    [BepInPlugin("CW_Jesse.BetterFPS", "CW_Jesse's Valheim Framerate Booster", "1.1.2")]
     public class BetterFps : BaseUnityPlugin {
         
         public static ConfigEntry<bool> ConfigEnabled;
