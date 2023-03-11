@@ -11,6 +11,7 @@ namespace CWJesse.BetterFPS {
         private const float MIN_FIXED_DELTA_TIME = 1.0f / 50.0f;
         private const float MAX_FIXED_DELTA_TIME = 1.0f / 20.0f;
 
+        private const int DEFAULT_MINFPS = 30;
         private const int MIN_MINFPS = 5;
         private const int MAX_MINFPS = 120;
         
@@ -25,7 +26,7 @@ namespace CWJesse.BetterFPS {
             ConfigMinFps = config.Bind(
                 "BetterFPS",
                 "Minimum Target FPS",
-                30,
+                DEFAULT_MINFPS,
                 new ConfigDescription("Automatically reduces frequency of physics & animation calculations to meet this target FPS.", 
                     new AcceptableValueRange<int>(MIN_MINFPS, MAX_MINFPS)));
         }
@@ -48,7 +49,7 @@ namespace CWJesse.BetterFPS {
             if (!BetterFps.ConfigEnabled.Value) return true;
             
             FrameTimeAverage = Mathf.Lerp(FrameTimeAverage, Time.unscaledDeltaTime, Time.unscaledDeltaTime); // the lower the frame rate, the faster it finds the current frame rate
-            ___m_fps.text = $"{(1.0f/FrameTimeAverage):0})";
+            ___m_fps.text = $"{(1.0f/FrameTimeAverage):0}";
             ___m_frameTime.text = $"({(FrameTimeAverage * 1000f):0}ms)";
 
             return false;
