@@ -18,7 +18,8 @@ For multiplayer improvements, you may also enjoy [Better Networking](https://val
 
 ### Thank You
 
-- nightshade221 (Max), Tquilarius, and 1 more for being a patron and providing a community!
+- nightshade221 (Max), Tquilarius, and 1 more for being patrons!
+- monolithtma, ZeroKMD, and Cheb for providing feedback!
 - [spot reserved for people who submit error logs]
 
 

@@ -1,3 +1,6 @@
+### 1.1.0
+- more responsive with low frame rates
+- fixed bug where mod wasn't always working as intended
 ### 1.0.0
 - 🎺 released 🎺
 - if you see trumpets above, then you can put emojis in changelogs
