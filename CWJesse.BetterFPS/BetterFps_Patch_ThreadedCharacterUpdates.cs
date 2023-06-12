@@ -98,9 +98,9 @@ namespace CWJesse.BetterFPS {
             characterThreads.Remove(__instance.GetHashCode());
         }
 
-        [HarmonyPatch(typeof(Character), "FixedUpdate")]
+        [HarmonyPatch(typeof(Character), "CustomFixedUpdate")]
         [HarmonyPrefix]
-        public static bool FixedUpdate(ref Character __instance) {
+        public static bool CustomFixedUpdate(ref Character __instance) {
             if (characterThreads.TryGetValue(__instance.GetHashCode(), out CharacterThread characterThread) && characterThread.isAlive) {
                 characterThread.FixedUpdate();
                 return false;

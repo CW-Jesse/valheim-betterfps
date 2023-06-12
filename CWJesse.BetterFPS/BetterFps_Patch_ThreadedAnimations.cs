@@ -22,8 +22,8 @@ namespace CW_Jesse.BetterFPS {
         private static FieldInfo m_animatorFieldInfo = AccessTools.Field(typeof(Character), "m_animator");
         private static FieldInfo m_nviewFieldInfo = AccessTools.Field(typeof(Character), "m_nview");
         private static FieldInfo m_zanimFieldInfo = AccessTools.Field(typeof(Character), "m_zanim");
-        public static int m_forwardSpeedID = (int)AccessTools.Field(typeof(ZSyncAnimation), "m_forwardSpeedID").GetValue(null);
-        public static int m_sidewaySpeedID = (int)AccessTools.Field(typeof(ZSyncAnimation), "m_sidewaySpeedID").GetValue(null);
+        public static int s_forwardSpeedID = (int)AccessTools.Field(typeof(ZSyncAnimation), "s_forwardSpeedID").GetValue(null);
+        public static int s_sidewaySpeedID = (int)AccessTools.Field(typeof(ZSyncAnimation), "s_sidewaySpeedID").GetValue(null);
 
         public AnimationsInfo(Character character) {
             m_animator = (Animator)m_animatorFieldInfo.GetValue(character);
@@ -67,7 +67,7 @@ namespace CW_Jesse.BetterFPS {
             float value = setFloatCache[hash];
             
             if ((double) Mathf.Abs(m_animator.GetFloat(hash) - value) < 0.0099999997764825821) return;
-            if (m_smoothCharacterSpeeds && (hash == m_forwardSpeedID || hash == m_sidewaySpeedID))
+            if (m_smoothCharacterSpeeds && (hash == s_forwardSpeedID || hash == s_sidewaySpeedID))
                 m_animator.SetFloat(hash, value, 0.2f, Time.fixedDeltaTime);
             else m_animator.SetFloat(hash, value);
             if (m_nview.GetZDO() == null || !m_nview.IsOwner()) return;
