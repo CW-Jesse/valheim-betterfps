@@ -16,32 +16,25 @@
 
     <ItemGroup>
       <Reference Include="0Harmony">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\core\0Harmony.dll</HintPath>
-        <Private>False</Private>
+        <HintPath>..\..\..\Valheim\BepInEx\core\0Harmony.dll</HintPath>
       </Reference>
       <Reference Include="assembly_valheim">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\assembly_valheim.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\..\..\Valheim\valheim_Data\Managed\assembly_valheim.dll</HintPath>
       </Reference>
       <Reference Include="BepInEx">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\core\BepInEx.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\..\..\Valheim\BepInEx\core\BepInEx.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.dll</HintPath>
-          <Private>False</Private>
-      </Reference>
-      <Reference Include="UnityEngine.AnimationModule">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\..\..\Valheim\unstripped_corlib\UnityEngine.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.CoreModule">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\DumpedAssemblies\valheim\UnityEngine.CoreModule.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\..\..\Valheim\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TextCoreModule">
+        <HintPath>..\..\..\Valheim\unstripped_corlib\UnityEngine.TextCoreModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.UI">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.UI.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\..\..\Valheim\unstripped_corlib\UnityEngine.UI.dll</HintPath>
       </Reference>
     </ItemGroup>
 
@@ -63,7 +56,7 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="copy /Y /V &quot;bin\Debug\net472\CW_Jesse.BetterFPS.dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\CW_Jesse.BetterFPS.dll&quot; &amp;&amp; copy /Y /V &quot;bin\Debug\net472\CW_Jesse.BetterFPS.pdb&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\CW_Jesse.BetterFPS.pdb&quot;" />
+      <Exec Command="xcopy &quot;$(TargetPath)&quot; &quot;D:\Valheim_Dev\valheim\BepInEx\Plugins&quot; /Y&#xD;&#xA;xcopy &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;D:\Valheim_Dev\valheim\BepInEx\Plugins&quot; /Y" />
     </Target>
 
 </Project>

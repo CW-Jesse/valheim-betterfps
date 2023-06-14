@@ -30,7 +30,7 @@ namespace CWJesse.BetterFPS {
         private static Action<Character> SyncVelocity = (Action<Character>)Delegate.CreateDelegate(typeof(Action<Character>), AccessTools.Method(typeof(Character), "SyncVelocity"));
         private static Action<Character> CheckDeath = (Action<Character>)Delegate.CreateDelegate(typeof(Action<Character>), AccessTools.Method(typeof(Character), "CheckDeath"));
         
-        [HarmonyPatch(typeof(Character), "FixedUpdate")]
+        [HarmonyPatch(typeof(Character), "CustomFixedUpdate")]
         [HarmonyPrefix]
         public static bool CharacterUpdates(ref Character __instance, ref ZNetView ___m_nview, ref float ___m_lastGroundTouch, ref float ___m_jumpTimer, ref float ___m_acceleration) {
             if (!BetterFps.ConfigEnabled.Value) return true;
