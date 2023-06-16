@@ -16,32 +16,22 @@
 
     <ItemGroup>
       <Reference Include="0Harmony">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\core\0Harmony.dll</HintPath>
-        <Private>False</Private>
+        <HintPath>..\lib\0Harmony.dll</HintPath>
       </Reference>
       <Reference Include="assembly_valheim">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\assembly_valheim.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\lib\assembly_valheim.dll</HintPath>
       </Reference>
       <Reference Include="BepInEx">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\core\BepInEx.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\lib\BepInEx.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.dll</HintPath>
-          <Private>False</Private>
-      </Reference>
-      <Reference Include="UnityEngine.AnimationModule">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\lib\UnityEngine.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.CoreModule">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\DumpedAssemblies\valheim\UnityEngine.CoreModule.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\lib\UnityEngine.CoreModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.UI">
-        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.UI.dll</HintPath>
-          <Private>False</Private>
+        <HintPath>..\lib\UnityEngine.UI.dll</HintPath>
       </Reference>
     </ItemGroup>
 
