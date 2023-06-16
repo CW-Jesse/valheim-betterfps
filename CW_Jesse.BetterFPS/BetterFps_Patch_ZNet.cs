@@ -10,7 +10,7 @@ namespace CWJesse.BetterFPS {
         
         private static Dictionary<int, float> ZNetSceneLastUpdateTime = new Dictionary<int, float>();
         
-        [HarmonyPatch(typeof(ZNetScene), "Update")]
+        [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Update))]
         [HarmonyPrefix]
         public static bool ZNetSceneUpdates(ref ZNetScene __instance) {
             if (!BetterFps.ConfigEnabled.Value) return true;

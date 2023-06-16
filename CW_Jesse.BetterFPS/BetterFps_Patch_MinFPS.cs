@@ -33,7 +33,7 @@ namespace CWJesse.BetterFPS {
                     new AcceptableValueRange<int>(MIN_MINFPS, MAX_MINFPS)));
         }
         
-        [HarmonyPatch(typeof(Game), "Update")]
+        [HarmonyPatch(typeof(Game), nameof(Game.Update))]
         [HarmonyPostfix]
         public static void MeetMinFps() {
             if (!BetterFps.ConfigEnabled.Value) return;
@@ -49,7 +49,7 @@ namespace CWJesse.BetterFPS {
             Time.maximumDeltaTime = Mathf.Clamp(FrameTimeAverage * MAX_HICCUP_PERCENT, MIN_FRAME_TIME, MAX_FRAME_TIME);
         }
         
-        [HarmonyPatch(typeof(ConnectPanel), "UpdateFps")]
+        [HarmonyPatch(typeof(ConnectPanel), nameof(ConnectPanel.UpdateFps))]
         [HarmonyPrefix]
         public static bool FpsCounterImprovements(ref Text ___m_fps, ref Text ___m_frameTime) {
             if (!BetterFps.ConfigEnabled.Value) return true;

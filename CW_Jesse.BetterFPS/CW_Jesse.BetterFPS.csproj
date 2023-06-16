@@ -18,7 +18,7 @@
       <Reference Include="0Harmony">
         <HintPath>..\lib\0Harmony.dll</HintPath>
       </Reference>
-      <Reference Include="assembly_valheim">
+      <Reference Include="assembly_valheim" Publicize="true">
         <HintPath>..\lib\assembly_valheim.dll</HintPath>
       </Reference>
       <Reference Include="BepInEx">
@@ -50,6 +50,10 @@
         <Pack>True</Pack>
         <PackagePath></PackagePath>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" />
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

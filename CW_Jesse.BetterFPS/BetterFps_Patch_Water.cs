@@ -15,7 +15,7 @@ namespace CWJesse.BetterFPS {
         
         private static Dictionary<int, float> WaterVolumeLastUpdateTime = new Dictionary<int, float>();
         
-        [HarmonyPatch(typeof(WaterVolume), "Update")]
+        [HarmonyPatch(typeof(WaterVolume), nameof(WaterVolume.Update1))]
         [HarmonyPrefix]
         public static bool WaterVolumeUpdates(ref WaterVolume __instance) {
             if (!BetterFps.ConfigEnabled.Value) return true;
@@ -30,7 +30,7 @@ namespace CWJesse.BetterFPS {
         
         private static Dictionary<int, float> FishLastUpdateTime = new Dictionary<int, float>();
         
-        [HarmonyPatch(typeof(Fish), "FixedUpdate")]
+        [HarmonyPatch(typeof(Fish), nameof(Fish.CustomFixedUpdate))]
         [HarmonyPrefix]
         public static bool FishUpdates(ref Fish __instance) {
             if (!BetterFps.ConfigEnabled.Value) return true;
