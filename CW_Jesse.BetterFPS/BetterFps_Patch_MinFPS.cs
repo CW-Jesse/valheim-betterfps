@@ -13,7 +13,7 @@ namespace CWJesse.BetterFPS {
 
         private const int DEFAULT_MINFPS = 20;
         private const int MIN_MINFPS = 5;
-        private const int MAX_MINFPS = 20;
+        private const int MAX_MINFPS = 60;
         
         private const float MIN_FRAME_TIME = 0.05f;
         private const float MAX_FRAME_TIME = 0.2f;
