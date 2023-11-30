@@ -16,7 +16,7 @@ namespace CWJesse.BetterFPS {
         private const int MAX_MINFPS = 60;
         
         private const float MIN_FRAME_TIME = 0.05f;
-        private const float MAX_FRAME_TIME = 0.6f;
+        private const float MAX_FRAME_TIME = 0.2f;
         private const float MAX_HICCUP_PERCENT = 1.25f;
 
         private static float FrameTimeAverage = Time.unscaledDeltaTime;
