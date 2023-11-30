@@ -42,7 +42,8 @@ namespace CWJesse.BetterFPS {
             
             
             float fixedDeltaTime = Time.fixedDeltaTime;
-            
+            ZDO zDO = ___m_nview.GetZDO();
+
             UpdateLayer(__instance);
             UpdateContinousEffects(__instance);
             UpdateWater(__instance, fixedDeltaTime);
@@ -52,7 +53,7 @@ namespace CWJesse.BetterFPS {
             if (!___m_nview.IsOwner()) return false;
             UpdateGroundContact(__instance, fixedDeltaTime);
             UpdateNoise(__instance, fixedDeltaTime);
-            __instance.GetSEMan().Update(fixedDeltaTime);
+            __instance.GetSEMan().Update(zDO, fixedDeltaTime);
             UpdateStagger(__instance, fixedDeltaTime);
             UpdatePushback(__instance, fixedDeltaTime);
             
